@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MvcStartApp.Models;
+using MvcStartApp.Models.Db;
+using MvcStartApp.Models.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,14 +14,33 @@ namespace MvcStartApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        // ссылка на репозиторий
+        private readonly IBlogRepository _repo;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(ILogger<HomeController> logger, IBlogRepository repo)
         {
             _logger = logger;
+            _repo = repo;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // Добавим создание нового пользователя
+            var newUser = new User()
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Andrey",
+                LastName = "Petrov",
+                JoinDate = DateTime.Now
+            };
+
+            // Добавим в базу
+            await _repo.AddUser(newUser);
+
+            // Выведем результат
+            Console.WriteLine($"User with id {newUser.Id}, named {newUser.FirstName} was successfully added on {newUser.JoinDate}");
+
             return View();
         }
 
