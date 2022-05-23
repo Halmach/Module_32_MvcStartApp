@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MvcStartApp.Models.Db;
+using MvcStartApp.Models.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +26,14 @@ namespace MvcStartApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // регистрация сервиса репозитория для взаимодействия с базой данных
+            services.AddTransient<IBlogRepository, BlogRepository>();
+            //  string connection = Configuration.GetConnectionString("DefaultConnection");
+            string connection = "Server=DESKTOP-45Q7VOT\\SQLEXPRESS01;DataBase =ASP_NET_MVC_FIRST_APP;Trusted_Connection=True;TrustServerCertificate=true; ";
+            services.AddDbContext<BlogContext>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
