@@ -28,5 +28,10 @@ namespace MvcStartApp.Controllers
             return View(authors);
         }
 
+        public async Task<IActionResult> Register()
+        {
+            return View();
+        }
+
     }
 }

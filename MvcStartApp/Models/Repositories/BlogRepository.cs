@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MvcStartApp.Models.Db;
+using System;
 using System.Threading.Tasks;
 
 namespace MvcStartApp.Models.Repositories
@@ -17,6 +18,9 @@ namespace MvcStartApp.Models.Repositories
 
         public async Task AddUser(User user)
         {
+            user.JoinDate = DateTime.Now;
+            user.Id = Guid.NewGuid();
+
             // Добавление пользователя
             var entry = _context.Entry(user);
             if (entry.State == EntityState.Detached)
