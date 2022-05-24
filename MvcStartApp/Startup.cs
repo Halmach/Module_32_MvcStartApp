@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MvcStartApp.Middlewares;
 using MvcStartApp.Models.Db;
 using MvcStartApp.Models.Repositories;
 using System;
@@ -28,6 +29,7 @@ namespace MvcStartApp
         {
             // регистрация сервиса репозитория для взаимодействия с базой данных
             services.AddTransient<IBlogRepository, BlogRepository>();
+            services.AddTransient<ILogRepository, LogRepository>();
             //  string connection = Configuration.GetConnectionString("DefaultConnection");
             string connection = "Server=DESKTOP-45Q7VOT\\SQLEXPRESS01;DataBase =ASP_NET_MVC_FIRST_APP;Trusted_Connection=True;TrustServerCertificate=true; ";
             services.AddDbContext<BlogContext>(options => options.UseSqlServer(connection));
@@ -35,7 +37,7 @@ namespace MvcStartApp
 
             
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -51,6 +53,7 @@ namespace MvcStartApp
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseMiddleware<LoggingMiddleware>();
 
             app.UseRouting();
 

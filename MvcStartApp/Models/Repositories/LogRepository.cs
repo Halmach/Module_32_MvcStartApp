@@ -20,7 +20,7 @@ namespace MvcStartApp.Models.Repositories
            request.Id = Guid.NewGuid();
            request.Date = DateTime.Now;
 
-            // Добавление пользователя
+            // Добавление лога
             var entry = _context.Entry(request);
             if (entry.State == EntityState.Detached)
                 await _context.Requests.AddAsync(request);
@@ -30,9 +30,10 @@ namespace MvcStartApp.Models.Repositories
 
         }
 
-        public Task<Request[]> GetRequests()
+        public async Task<Request[]> GetRequests()
         {
-            throw new System.NotImplementedException();
+            // Получим все логи
+            return await _context.Requests.ToArrayAsync();
         }
     }
 }
